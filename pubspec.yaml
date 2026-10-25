@@ -1,0 +1,51 @@
+name: scobro_flutter_photo_tools
+description: >-
+  Pick, crop, rotate and zoom photos to any aspect ratio, then hand the result
+  to your own uploader. Themeable editor, avatars and caching.
+version: 0.1.0
+homepage: https://github.com/scottpaulbrown/scobro_flutter_photo_tools
+repository: https://github.com/scottpaulbrown/scobro_flutter_photo_tools
+issue_tracker: https://github.com/scottpaulbrown/scobro_flutter_photo_tools/issues
+
+topics:
+  - image
+  - crop
+  - avatar
+  - image-picker
+  - photo
+
+platforms:
+  android:
+  ios:
+  web:
+  windows:
+  macos:
+  linux:
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
+
+dependencies:
+  file_picker: ^11.0.0
+  flutter:
+    sdk: flutter
+  image: ^4.5.0
+  image_picker: ^1.2.0
+
+dev_dependencies:
+  flutter_lints: ">=5.0.0 <7.0.0"
+  flutter_test:
+    sdk: flutter
+  image_picker_platform_interface: ^2.10.0
+  plugin_platform_interface: ^2.1.8
+
+screenshots:
+  - description: The framing editor on a phone, with live avatar previews.
+    path: doc/screenshots/editor_phone.png
+  - description: The editor on a desktop in dark mode, framing a 16:9 banner.
+    path: doc/screenshots/editor_desktop_dark.png
+  - description: The photo source sheet with a custom source and Remove.
+    path: doc/screenshots/source_sheet.png
+  - description: PhotoAvatar and ChangePhotoBadge, with photos and initials.
+    path: doc/screenshots/avatars_light.png

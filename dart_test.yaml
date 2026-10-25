@@ -1,0 +1,13 @@
+# Goldens are generated on Linux (CI's update-goldens workflow) with the test
+# font bundled under test/fonts, so they are skipped on Windows and macOS.
+# Screenshots for pub.dev are only written on demand:
+#   flutter test --tags screenshot --run-skipped --update-goldens
+tags:
+  golden:
+    on_os:
+      windows:
+        skip: Goldens are generated and compared on Linux only.
+      mac-os:
+        skip: Goldens are generated and compared on Linux only.
+  screenshot:
+    skip: Run on demand to refresh doc/screenshots.

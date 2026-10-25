@@ -1,0 +1,25 @@
+name: scobro_flutter_photo_tools_example
+description: Demonstrates scobro_flutter_photo_tools - avatar upload, a 16:9 banner and the versioned image loader.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
+
+dependencies:
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  scobro_flutter_photo_tools:
+    path: ../
+
+dev_dependencies:
+  flutter_lints: ">=5.0.0 <7.0.0"
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

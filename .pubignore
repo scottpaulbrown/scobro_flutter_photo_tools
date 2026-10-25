@@ -1,0 +1,14 @@
+# Planning notes, tooling and CI are not part of the published package.
+.planning/
+.github/
+tool/
+coverage/
+build/
+.dart_tool/
+test/goldens/failures/
+**/failures/
+example/build/
+example/.dart_tool/
+# Test assets used only for goldens (about 2 MB); tests skip fonts if absent.
+test/fonts/
+test/goldens/
