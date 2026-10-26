@@ -121,15 +121,15 @@ class StagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant StagePainter old) =>
-      old.image != image ||
-      old.framing != framing ||
-      old.cropBox != cropBox ||
-      old.aspectRatio != aspectRatio ||
-      old.maxZoom != maxZoom ||
-      old.guideShape != guideShape ||
-      old.scrim != scrim ||
-      old.guideColor != guideColor ||
-      old.guideWidth != guideWidth ||
-      old.gridOpacity != gridOpacity;
+  bool shouldRepaint(covariant StagePainter oldDelegate) =>
+      oldDelegate.image != image ||
+      oldDelegate.framing != framing ||
+      oldDelegate.cropBox != cropBox ||
+      oldDelegate.aspectRatio != aspectRatio ||
+      oldDelegate.maxZoom != maxZoom ||
+      oldDelegate.guideShape != guideShape ||
+      oldDelegate.scrim != scrim ||
+      oldDelegate.guideColor != guideColor ||
+      oldDelegate.guideWidth != guideWidth ||
+      oldDelegate.gridOpacity != gridOpacity;
 }

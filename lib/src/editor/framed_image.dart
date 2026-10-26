@@ -117,9 +117,9 @@ class _FramedImagePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _FramedImagePainter old) =>
-      old.image != image ||
-      old.framing != framing ||
-      old.aspectRatio != aspectRatio ||
-      old.maxZoom != maxZoom;
+  bool shouldRepaint(covariant _FramedImagePainter oldDelegate) =>
+      oldDelegate.image != image ||
+      oldDelegate.framing != framing ||
+      oldDelegate.aspectRatio != aspectRatio ||
+      oldDelegate.maxZoom != maxZoom;
 }

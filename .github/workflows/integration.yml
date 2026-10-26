@@ -27,6 +27,9 @@ jobs:
           sleep 2
       - name: Run
         working-directory: example
+        env:
+          # Use the Chrome that matches the chromedriver installed above.
+          CHROME_EXECUTABLE: ${{ steps.chrome.outputs.chrome-path }}
         run: |
           flutter pub get
           flutter drive \

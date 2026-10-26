@@ -122,6 +122,8 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+      - name: Show files changed by the Flutter tool
+        run: git status --short && git diff
       - run: flutter pub publish --dry-run
 
   example-builds:
