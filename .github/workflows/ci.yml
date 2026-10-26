@@ -57,7 +57,7 @@ jobs:
         run: cd example && flutter test
       - name: Upload coverage to Codecov
         if: matrix.latest
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           files: coverage/lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
