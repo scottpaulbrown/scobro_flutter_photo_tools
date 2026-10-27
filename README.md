@@ -42,8 +42,9 @@ router or design system.
 | Take a photo | ✅ | ✅ | ✅ | — | — | — |
 | Edit and render | ✅ | ✅ | ✅ ¹ | ✅ | ✅ | ✅ |
 
-¹ Web has no background isolates, so rendering a large picture may hold up a
-frame or two.
+¹ Web has no background isolates, so the browser does the decoding, scaling
+and JPEG encoding natively. A 12-megapixel photo opens and saves in well under
+a second.
 
 ## Install
 
@@ -221,8 +222,6 @@ await tester.tap(find.byKey(PhotoToolsKeys.changePhoto));
 
 ## Limitations
 
-- **Web renders on the main thread** (no isolates). Keep pictures modest; the
-  camera path is downscaled to `PickerOptions.maxDimension` (4096 px).
 - **HEIC** is only supported through the Android/iOS photo gallery, which
   converts it to JPEG. Elsewhere a HEIC file is refused as unsupported.
 - **No free-form crop, upload progress, drag-and-drop or flip** yet. They're

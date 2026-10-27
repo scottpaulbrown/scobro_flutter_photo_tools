@@ -3,6 +3,7 @@ import 'dart:ui' show Size;
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 
+import 'codec_pipeline.dart';
 import 'edited_image.dart';
 import 'framing_geometry.dart';
 import 'photo_framing.dart';
@@ -11,18 +12,27 @@ import 'render_options.dart';
 /// Turns a picked picture and its framing into the final file: applies the
 /// EXIF orientation, rotates, crops, resizes and encodes.
 ///
-/// The work runs through [compute], so on Android, iOS and desktop it happens
-/// on a background isolate and never janks the UI. Web has no isolates, so a
-/// large picture may stall a frame or two there; pick with a sensible
-/// `PickerOptions.maxDimension` to keep it small.
+/// On Android, iOS and desktop the work runs through [compute] with the
+/// `image` package, on a background isolate, so it never janks the UI. The
+/// web has no isolates, so there the browser does the work instead: Flutter's
+/// image codec decodes, the canvas crops and scales, and the browser's own
+/// encoder writes the JPEG. Both give the same result.
 class PhotoRenderer {
   /// Creates a [PhotoRenderer].
   const PhotoRenderer();
+
+  /// Forces the browser-codec pipeline on (true) or off (false) in tests,
+  /// which always run on the VM. Null picks by platform.
+  @visibleForTesting
+  static bool? debugUseCodecPipeline;
+
+  bool get _useCodec => debugUseCodecPipeline ?? kIsWeb;
 
   /// The picture's size in pixels once its EXIF orientation is applied.
   ///
   /// Throws a [FormatException] when [source] can't be decoded.
   Future<Size> sizeOf(Uint8List source) async {
+    if (_useCodec) return CodecPipeline.sizeOf(source);
     final result = await compute(_sizeOf, source);
     return Size(result[0].toDouble(), result[1].toDouble());
   }
@@ -32,8 +42,9 @@ class PhotoRenderer {
   /// The editor uses this to draw the picture upright on platforms whose
   /// image codec ignores EXIF orientation. Throws a [FormatException] when
   /// [source] can't be decoded.
-  Future<Uint8List> bakeOrientation(Uint8List source) =>
-      compute(_bakeOrientation, source);
+  Future<Uint8List> bakeOrientation(Uint8List source) => _useCodec
+      ? CodecPipeline.bakeOrientation(source)
+      : compute(_bakeOrientation, source);
 
   /// Renders [source] as [framing] keeps it, with [options].
   ///
@@ -43,7 +54,9 @@ class PhotoRenderer {
     PhotoFraming framing, [
     RenderOptions options = const RenderOptions(),
   ]) async {
-    final bytes = await compute(_render, _RenderJob(source, framing, options));
+    final bytes = _useCodec
+        ? await CodecPipeline.render(source, framing, options)
+        : await compute(_render, _RenderJob(source, framing, options));
     final size = options.outputSize;
     return EditedImage(
       bytes: bytes,

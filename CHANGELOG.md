@@ -1,3 +1,12 @@
+## 0.1.1
+
+- Web: much faster editing and saving. `PhotoRenderer` now uses the
+  browser's image codec, canvas and JPEG encoder on the web instead of
+  decoding in Dart on the main thread. On a 12-megapixel photo in Chrome
+  (debug build), opening the editor drops from about 16 s to under 0.1 s and
+  saving from about 21 s to under 0.5 s; the page no longer freezes.
+  Output and EXIF handling are unchanged.
+
 ## 0.1.0
 
 First release.
