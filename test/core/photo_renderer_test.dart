@@ -10,7 +10,7 @@ import 'package:scobro_flutter_photo_tools/testing.dart';
 bool _isRed(img.Pixel p) => p.r > 150 && p.b < 120;
 bool _isBlue(img.Pixel p) => p.b > 150 && p.r < 120;
 
-void main() {
+void _rendererTests() {
   const renderer = PhotoRenderer();
   // 80 x 40, with a 10 px red block at the top-left.
   final source = TestImages.asymmetricPng();
@@ -240,4 +240,59 @@ void main() {
       expect(String.fromCharCodes(edited.bytes).contains('Exif'), isFalse);
     });
   });
+}
+
+void main() {
+  group('isolate pipeline', () {
+    setUp(() => PhotoRenderer.debugUseCodecPipeline = false);
+    tearDown(() => PhotoRenderer.debugUseCodecPipeline = null);
+    _rendererTests();
+  });
+
+  group('pipelines agree', _pipelinesAgree);
+
+  // What the web uses: Flutter's codec and canvas instead of the image
+  // package. The same expectations hold.
+  group('codec pipeline', () {
+    setUp(() => PhotoRenderer.debugUseCodecPipeline = true);
+    tearDown(() => PhotoRenderer.debugUseCodecPipeline = null);
+    _rendererTests();
+  });
+}
+
+void _pipelinesAgree() {
+  // Where the red marker ends up in the upright picture, per corner.
+  Future<(int, int, List<bool>)> upright(int orientation, bool codec) async {
+    PhotoRenderer.debugUseCodecPipeline = codec;
+    try {
+      final baked = await const PhotoRenderer()
+          .bakeOrientation(TestImages.exifJpeg(orientation: orientation));
+      final out = img.decodePng(baked)!;
+      final w = out.width - 4;
+      final h = out.height - 4;
+      return (
+        out.width,
+        out.height,
+        [
+          _isRed(out.getPixel(3, 3)),
+          _isRed(out.getPixel(w, 3)),
+          _isRed(out.getPixel(3, h)),
+          _isRed(out.getPixel(w, h)),
+        ],
+      );
+    } finally {
+      PhotoRenderer.debugUseCodecPipeline = null;
+    }
+  }
+
+  for (var o = 1; o <= 8; o++) {
+    test('EXIF orientation $o comes out the same on both pipelines', () async {
+      final isolate = await upright(o, false);
+      final codec = await upright(o, true);
+      expect((codec.$1, codec.$2), (isolate.$1, isolate.$2));
+      expect(codec.$3, isolate.$3);
+      // And the marker is in exactly one corner.
+      expect(codec.$3.where((c) => c), hasLength(1));
+    });
+  }
 }

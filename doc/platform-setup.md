@@ -41,8 +41,9 @@ comes back as `PhotoFailed` with `PhotoToolsStrings.cameraDenied`.
 
 Nothing to add. Two things to know:
 
-- Web has no background isolates, so the renderer runs on the main thread.
-  A large picture may hold up a frame or two while it's saved.
+- Web has no background isolates, so the renderer hands the work to the
+  browser: Flutter's image codec decodes, the canvas crops and scales, and
+  the browser's encoder writes the JPEG. Large photos stay quick.
 - Browsers' file dialogs return files as they are: there is no downscaling
   before editing, and HEIC files are refused as unsupported.
 
