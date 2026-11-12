@@ -18,7 +18,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Sets up the OIDC token that pub uses to authenticate.
       - uses: dart-lang/setup-dart@v1
       - uses: subosito/flutter-action@v2
