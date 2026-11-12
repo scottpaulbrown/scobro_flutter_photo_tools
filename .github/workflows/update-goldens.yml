@@ -25,7 +25,7 @@ jobs:
         with:
           name: goldens
           path: test/goldens/
-      - uses: peter-evans/create-pull-request@v6
+      - uses: peter-evans/create-pull-request@v8
         with:
           branch: update-goldens/${{ github.ref_name }}
           base: ${{ github.ref_name }}
